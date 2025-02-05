@@ -1,7 +1,7 @@
 #!/bin/sh
 set -e
 
-FFMPEG_KIT_TAG="min.v5.1.5.2"
+FFMPEG_KIT_TAG="v5.1.6"
 FFMPEG_KIT_CHECKOUT="origin/develop"
 #FFMPEG_KIT_CHECKOUT="origin/tags/$FFMPEG_KIT_TAG"
 
@@ -73,16 +73,16 @@ git push
 git push origin --tags
 
 echo "Creating Release..."
-gh release create -p -d $FFMPEG_KIT_TAG -t "FFmpegKit SPM $FFMPEG_KIT_TAG" --generate-notes --verify-tag
+gh release create -p -d $FFMPEG_KIT_TAG -t "FFmpegKit SPM $FFMPEG_KIT_TAG" --generate-notes --verify-tag --repo sillsdev/ffmpeg-kit-spm
 
 echo "Uploading Binaries..."
 for f in $(ls "$XCFRAMEWORK_DIR")
 do
     if [[ $f == *.zip ]]; then
-        gh release upload $FFMPEG_KIT_TAG "$XCFRAMEWORK_DIR/$f"
+        gh release upload $FFMPEG_KIT_TAG "$XCFRAMEWORK_DIR/$f"  --repo sillsdev/ffmpeg-kit-spm
     fi
 done
 
-gh release edit $FFMPEG_KIT_TAG --draft=false
+gh release edit $FFMPEG_KIT_TAG --draft=false  --repo sillsdev/ffmpeg-kit-spm
 
 echo "All done!"
