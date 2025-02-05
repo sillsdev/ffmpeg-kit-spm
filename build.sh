@@ -1,7 +1,7 @@
 #!/bin/sh
 set -e
 
-FFMPEG_KIT_TAG="min.v5.1.5.1"
+FFMPEG_KIT_TAG="min.v5.1.5.2"
 FFMPEG_KIT_CHECKOUT="origin/develop"
 #FFMPEG_KIT_CHECKOUT="origin/tags/$FFMPEG_KIT_TAG"
 
