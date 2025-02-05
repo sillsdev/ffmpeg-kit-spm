@@ -11,7 +11,7 @@ https://github.com/tylerjonesio/ffmpeg-kit-spm
 
 If using this in a swift package, add this repo as a dependency.
 ```
-.package(url: "https://github.com/tylerjonesio/ffmpeg-kit-spm/", .upToNextMajor(from: "5.1.0"))
+.package(url: "https://github.com/sillsdev/ffmpeg-kit-spm/", .upToNextMajor(from: "5.1.0"))
 ```
 
 ### Usage
