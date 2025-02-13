@@ -3,7 +3,7 @@
 
 import PackageDescription
 
-let release = "v5.1.8"
+let release = "v5.1.9"
 
 let frameworks = ["ffmpegkit": "3f44018d3a02068de1193596de2ea66bcebeee7ac02e6b95145f03820a8e6102", "libavcodec": "0fefe1165ca034b19017db2872cd49016524a19ea8efabd3307302e289fe3874", "libavdevice": "72b762705270abc6568ac94a3f15b9fd5115a894bb07f648a3a4bf2996b13779", "libavfilter": "9620d3cc21904c30b9988b7a5189f14d4b703fec9cd456a1eaa76ce7cd2f362d", "libavformat": "36b40ebd6590872064403117144dc7677b14fe2fadc3a9588e36ee9241370a88", "libavutil": "ff044b019f83970c69b862fc8b61588d02adebd783c90042a815c49ea6400b31", "libswresample": "613061d804b30ed98b52f13053aa98221699edf44b0fe3e08792612d223219b7", "libswscale": "1e9a870fd285cd6342b962500c5d7f14205853cc937251322f3e5f12f7810fad"]
 
@@ -44,10 +44,16 @@ let package = Package(
         .target(
             name: "FFmpeg-Kit",
             dependencies: frameworks.map { .byName(name: $0.key) },
-            linkerSettings: linkerSettings),
+            linkerSettings: linkerSettings,
+            cSettings: [.define("TARGET_UNIVERSAL", to: "1")], // Forces universal build
+            swiftSettings: [.define("SUPPORT_SIMULATOR")] // Allows x86_64 support
+            ),
         .target(
             name: "FFmpeg",
             dependencies: libAVFrameworks.map { .byName(name: $0.key) },
-            linkerSettings: linkerSettings),
+            linkerSettings: linkerSettings,
+            cSettings: [.define("TARGET_UNIVERSAL", to: "1")], // Forces universal build
+            swiftSettings: [.define("SUPPORT_SIMULATOR")] // Allows x86_64 support
+            ),
     ] + frameworks.map { xcframework($0) }
 )
