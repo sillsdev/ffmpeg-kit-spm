@@ -3,9 +3,9 @@
 
 import PackageDescription
 
-let release = "v5.1.9"
+let release = "min.v5.1.9.1"
 
-let frameworks = ["ffmpegkit": "de9502208f25c89480a3f29cfbf537ba946a39a700a87196d01f8715df9c1fe1", "libavcodec": "19e6a12923547c63a9d519cc0e869d7fa1023c4cb9d2b78ac46dc41548a32faf", "libavdevice": "0ae2e7cab50fabc6289f6545058a77e1479bd014861dcc56f27633c2007d09a6", "libavfilter": "1af6e324db0bd808e609b56ac034b2e45811f2b8824c315f010c0e1a6b0d2dd6", "libavformat": "97eb3c332469d163bd0b3f5670014e516ecb740ce9e63cef019146742e3cf9ff", "libavutil": "c0cef4be436914c54bbeeb3f45e8e83ca069628ab1fb1078771ca99f401ad0a0", "libswresample": "f439694f25d65f2d7297d01c03355f2f27a337d01caebcec9d6ee2e1317ed8cd", "libswscale": "bc64ffe4d30bb02dab91094f3b605671c5fac30055f9f1269fa692ae75a40417"]
+let frameworks = ["ffmpegkit": "9d3851abb80121233b93c27107cc9739bc0f1320d6f561e348c37d724b5114db", "libavcodec": "11edaf5e22ee1a2bf61982b740f19b8f1ccdf5bde16b7fd4dad81b5fe3eff1f2", "libavdevice": "73dddb1c5351e162e487c7c1f9176996d4d53d37d22527d1d2cc60fb8d495b42", "libavfilter": "eac5ff27f22379680d5462ae24e80f9e7c9d9004b9d0aabef4a085eff772d738", "libavformat": "fcc4661c6aba49bf4089ded4c500fda8f3099f1b9bf5de116c3c5102f6bf7afc", "libavutil": "4c38e01c3e35db0e50abe5bd51f7a5758c71806222a4396ae724a8299d2ac870", "libswresample": "58d04ba747de99b369316980d80bcb210e8f475f26a4aace7dce97f31f2fbd2e", "libswscale": "334e1897accef5bc5fc6b41e01b6a75abce0f6e79e5c5247d9389ed46d920840"]
 
 func xcframework(_ package: Dictionary<String, String>.Element) -> Target {
     let url = "https://github.com/sillsdev/ffmpeg-kit-spm/releases/download/\(release)/\(package.key).xcframework.zip"
@@ -38,22 +38,16 @@ let package = Package(
             name: "FFmpeg",
             type: .dynamic,
             targets: ["FFmpeg"] + libAVFrameworks.map { $0.key }),
-    ] + libAVFrameworks.map { .library(name: $0.key, targets: [$0.key]) },
+    ] + frameworks.map { .library(name: $0.key, targets: [$0.key]) },
     dependencies: [],
     targets: [
         .target(
             name: "FFmpeg-Kit",
             dependencies: frameworks.map { .byName(name: $0.key) },
-            linkerSettings: linkerSettings,
-            cSettings: [.define("TARGET_UNIVERSAL", to: "1")], // Forces universal build
-            swiftSettings: [.define("SUPPORT_SIMULATOR")] // Allows x86_64 support
-            ),
+            linkerSettings: linkerSettings),
         .target(
             name: "FFmpeg",
             dependencies: libAVFrameworks.map { .byName(name: $0.key) },
-            linkerSettings: linkerSettings,
-            cSettings: [.define("TARGET_UNIVERSAL", to: "1")], // Forces universal build
-            swiftSettings: [.define("SUPPORT_SIMULATOR")] // Allows x86_64 support
-            ),
+            linkerSettings: linkerSettings),
     ] + frameworks.map { xcframework($0) }
 )
